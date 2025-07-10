@@ -8,8 +8,8 @@ def handler(event, context):
     bucket_name = os.environ["BUCKET_NAME"]
     topic_arn = os.environ.get("TOPIC_ARN")  
 
-    print(f"Listing objects in bucket: {bucket_name}") # easier to track
-    response = s3.list_objects_v2(Bucket=bucket_name) # uses the AWS method to list from bucket
+    print(f"Listing objects in bucket: {bucket_name}") 
+    response = s3.list_objects_v2(Bucket=bucket_name) # use the AWS method to list from bucket
 
     object_names = [obj['Key'] for obj in response.get("Contents", [])]
 

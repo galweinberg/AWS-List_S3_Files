@@ -27,18 +27,43 @@ class DevopsAssignmentStack(Stack):
         topic = sns.Topic(self, "S3NotificationTopic")
         topic.add_subscription(subs.EmailSubscription("galw123@gmail.com"))
 
+
+        #IAM part
+        lambda_role = iam.Role(self, "mainLambdaRole",
+            assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole")
+        ]
+    )
+
+        # הוספת הרשאות קריאה ל־S3 ופרסום ל־SNS
+        lambda_role.add_to_policy(iam.PolicyStatement(
+            actions=["s3:List*", "s3:GetObject*", "sns:Publish"],
+            resources=[
+            bucket.bucket_arn,
+            f"{bucket.bucket_arn}/*",
+            topic.topic_arn
+        ]
+    ))
+
+
+
+
+
+
         #   main lambda - that lists files in the bucket, creation
-        lambda_fn = _lambda.Function(self, "ListS3Lambda",
+        main_lambda = _lambda.Function(self, "ListS3Lambda",
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="main_lambda.handler",
             code=_lambda.Code.from_asset(str(Path(__file__).parent / "lambdas")),
             environment={
                 "BUCKET_NAME": bucket.bucket_name,
                 "TOPIC_ARN": topic.topic_arn
-            }
+            },
+            role = lambda_role
         )
         # premissions for lambda on s3 bucket
-        bucket.grant_read(lambda_fn)
+        bucket.grant_read(main_lambda)
 
         #helper lambda to help us upload files, creation
         upload_lambda = _lambda.Function(self, "UploadFilesLambda",
