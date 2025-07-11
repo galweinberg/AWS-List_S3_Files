@@ -1,58 +1,125 @@
+# DevOps Assignment – AWS Serverless Project
 
-# Welcome to your CDK Python project!
+This project defines and deploys a simple serverless application using **AWS CDK (Python)**. It uses **Lambda**, **S3**, and **SNS**, with all infrastructure managed as code and deployed through **GitHub Actions**.
 
-This is a blank project for CDK development with Python.
+***It is important to mention that without inserting AWS secret to GitHub, and changing subs.EmailSubscription("REPLACE_ME@example.com") into your email, it will not work well.***
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+---
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+## 📁 Contents (What’s Included)
 
-To manually create a virtualenv on MacOS and Linux:
+- ✅ Infrastructure as Code (AWS CDK in Python)
+- ✅ Lambda function to list S3 objects and send email via SNS
+- ✅ Lambda to upload sample files to S3 during deployment
+- ✅ `sample_files/` folder with sample S3 data
+- ✅ GitHub Actions workflow for CI/CD
+- ✅ Script for manually triggering the Lambda
+- ✅ This README with setup and instructions
 
-```
-$ python -m venv .venv
-```
+---
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+## 🧰 Tools Used
 
-```
-$ source .venv/bin/activate
-```
+- **AWS CDK** (Infrastructure as Code)
+- **AWS Lambda** (Python 3.9)
+- **Amazon S3** (Object storage)
+- **Amazon SNS** (Email notifications)
+- **Boto3** (Manual test trigger)
+  
+ ***(all above are in devops_assignment in the project)***
 
-If you are a Windows platform, you would activate the virtualenv like this:
+- **GitHub Actions** (CI/CD)
+  
+  ***(under .github/workflows)***
 
-```
-% .venv\Scripts\activate.bat
-```
 
-Once the virtualenv is activated, you can install the required dependencies.
+---
 
-```
-$ pip install -r requirements.txt
-```
+## Setup and Deployment
 
-At this point you can now synthesize the CloudFormation template for this code.
+> You’ll need AWS credentials (access key, secret, account ID) to deploy.
 
-```
-$ cdk synth
-```
+### 1. Install dependencies
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+pip install -r requirements.txt
+npm install -g aws-cdk
 
-## Useful commands
+### 2. Bootstrap CDK (first time only)
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+cdk bootstrap
+### 3. Deploy manually
 
-Enjoy!
+cdk deploy
+## GitHub Actions CI/CD
+The project includes a deployment workflow at .github/workflows/deploy.yml.
+
+To run it:
+
+### Add these GitHub secrets:
+
+AWS_ACCESS_KEY_ID
+
+AWS_SECRET_ACCESS_KEY
+
+AWS_ACCOUNT_ID (your 12-digit AWS account ID)
+
+Trigger the deploy:
+
+Go to the Actions tab
+
+Select the Deploy workflow
+
+Click Run workflow
+
+## SNS Subscription (Email)
+SNS is used to send an email listing the files in the S3 bucket.
+
+The subscription email is set as a placeholder:
+
+subs.EmailSubscription("REPLACE_ME@example.com")
+### Replace this with your own email and confirm the subscription when prompted by AWS.
+
+## 📂 Files Uploaded to S3 on Deploy
+During deployment, a helper Lambda (upload_files.py) uploads everything in the sample_files/ folder to the S3 bucket.
+
+Examples:
+
+checkcheck.txt
+
+heyWrold.txt
+
+This runs automatically during cdk deploy.
+
+## Manual Lambda Trigger (Test)
+You can test the main Lambda manually using the provided script.
+***in the project - under tests/test_trigger_lambda***
+
+### Option 1: Python + Boto3
+
+python tests/test_trigger_lambda.py
+This invokes the Lambda named ListS3Lambda and prints the list of S3 objects.
+
+### Option 2: AWS CLI
+
+aws lambda invoke \
+  --function-name ListS3Lambda \
+  --payload '{}' \
+  response.json
+
+## ✅ Checklist: Assignment Requirements
+- Deliverable	Status
+- GitHub repo with CDK IaC	✅
+- Lambda function to list S3 + send SNS	✅
+- SNS topic with email subscription	✅ (placeholder)
+- Upload files to S3 during deploy	✅
+- GitHub Actions workflow for deployment	✅
+- Manual Lambda trigger method (script)	✅
+- README with all required sections	✅
+
+### Notes
+All secrets are handled via GitHub Secrets — none are committed to the repo.
+
+SNS requires email confirmation after first deploy.
+
+This project is designed to work with the AWS Free Tier.
+
