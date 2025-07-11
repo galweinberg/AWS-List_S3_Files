@@ -1,4 +1,4 @@
-# DevOps Assignment – AWS Serverless Project
+# DevOps Assignment – AWS  Project
 
 This project defines and deploys a simple serverless application using **AWS CDK (Python)**. It uses **Lambda**, **S3**, and **SNS**, with all infrastructure managed as code and deployed through **GitHub Actions**.
 
@@ -26,7 +26,7 @@ This project defines and deploys a simple serverless application using **AWS CDK
 - **Amazon SNS** (Email notifications)
 - **Boto3** (Manual test trigger)
   
- ***(all above are in devops_assignment in the project)***
+  ***(all above are under devops_assignment in the project)***
 
 - **GitHub Actions** (CI/CD)
   
@@ -35,33 +35,84 @@ This project defines and deploys a simple serverless application using **AWS CDK
 
 ---
 
-## Setup and Deployment
+# Setup and Deployment
 
-> You’ll need AWS credentials (access key, secret, account ID) to deploy.
+> You’ll need AWS credentials (access key, secret, account ID) and an available email to deploy.
 
 ### 1. Install dependencies
 
 pip install -r requirements.txt
 npm install -g aws-cdk
 
-### 2. Bootstrap CDK (first time only)
+### 2. Configure AWS Locally (optional, for manual deploy)
 
-cdk bootstrap
-### 3. Deploy manually
+### In your console:
 
-cdk deploy
+aws configure
+
+Then enter:
+
+- AWS Access Key ID
+
+- AWS Secret Access Key
+
+- Default region (e.g., us-east-1)
+
+This allows you to use cdk bootstrap and cdk deploy locally.
+
+### 3. Set Up GitHub Secrets
+
+In your GitHub repo:
+
+- Go to Settings → Secrets and variables → Actions
+
+- Click New repository secret
+
+ Add the following secrets:
+
+
+- `AWS_ACCESS_KEY_ID` — Your access key ID
+  
+- `AWS_SECRET_ACCESS_KEY` — Your secret access key
+  
+- `AWS_ACCOUNT_ID` — Your 12-digit AWS Account ID  
+
+These are required for the GitHub Actions deployment.
+
+
+### 4. Replace SNS Email
+In your CDK stack file (devops_assignment_stack.py), update the placeholder email:
+
+subs.EmailSubscription("REPLACE_ME@example.com")
+
+➡️ Replace it with your own email 
+
+✅ Important: After deployment, you will receive an email from AWS SNS — click "Confirm subscription" to start receiving notifications.
+
+### 5. Bootstrap CDK (first time only)
+
+***cdk bootstrap***
+
+### 6. Deploy manually
+
+***cdk deploy***
+
+this will
+
+- Create the S3 bucket
+
+- Upload files from sample_files/
+
+- Deploy both Lambda functions
+
+- Set up the SNS topic and subscription
+
 ## GitHub Actions CI/CD
 The project includes a deployment workflow at .github/workflows/deploy.yml.
 
 To run it:
 
-### Add these GitHub secrets:
-
-AWS_ACCESS_KEY_ID
-
-AWS_SECRET_ACCESS_KEY
-
-AWS_ACCOUNT_ID (your 12-digit AWS account ID)
+### Only after adding the secrets to GitHub:
 
 Trigger the deploy:
 
@@ -71,12 +122,59 @@ Select the Deploy workflow
 
 Click Run workflow
 
-## SNS Subscription (Email)
+
+# 🔍 Main AWS Components (Explanation)
+
+
+## 🔐 IAM Role
+
+The main Lambda function uses a dedicated IAM role with least-privilege permissions:
+
+- Basic Lambda execution 
+
+- Read access to the specific S3 bucket 
+
+- Permission to publish messages to the SNS topic 
+
+This is defined in the CDK.
+
+
+## 🪣 Amazon S3
+The stack creates a new versioned S3 bucket where files from sample_files/ are uploaded during deployment.
+
+- Files are uploaded by the helper Lambda function
+
+- Bucket is set to auto-delete on stack destruction (for testing/demo use)
+
+
+
+## 📝 AWS Lambda
+There are two Lambda functions in the project:
+
+### Main Lambda (main_lambda.py)
+
+- Lists all objects in the S3 bucket
+
+- Sends the object list via SNS email notification
+
+
+### Helper Lambda (upload_files.py)
+
+- Uploads local files from sample_files/ to the bucket at deployment time
+
+- Triggered automatically using a CDK CustomResource
+
+- Both functions are written in Python and defined as part of the CDK stack
+
+
+## 📬 SNS Subscription (Email)
 SNS is used to send an email listing the files in the S3 bucket.
 
 The subscription email is set as a placeholder:
 
 subs.EmailSubscription("REPLACE_ME@example.com")
+
+
 ### Replace this with your own email and confirm the subscription when prompted by AWS.
 
 ## 📂 Files Uploaded to S3 on Deploy
@@ -86,7 +184,7 @@ Examples:
 
 checkcheck.txt
 
-heyWrold.txt
+heyWorld.txt
 
 This runs automatically during cdk deploy.
 
