@@ -21,14 +21,15 @@ class DevopsAssignmentStack(Stack):
         bucket = s3.Bucket(self, "AssignmentBucket",
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY,
-            auto_delete_objects=True
+            auto_delete_objects=True 
+            # auto deletes when destroyd
         )
-        # SNS part
+        # SNS part - for email notifications in lambda
         topic = sns.Topic(self, "S3NotificationTopic")
-        topic.add_subscription(subs.EmailSubscription("galw123@gmail.com"))
+        topic.add_subscription(subs.EmailSubscription("REPLACE_ME@example.com"))
 
 
-        #IAM part
+        #IAM part - attached to main lambda
         lambda_role = iam.Role(self, "mainLambdaRole",
             assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
             managed_policies=[
@@ -36,7 +37,7 @@ class DevopsAssignmentStack(Stack):
         ]
     )
 
-        # הוספת הרשאות קריאה ל־S3 ופרסום ל־SNS
+        # gives premissions as needed to s3 and SNS
         lambda_role.add_to_policy(iam.PolicyStatement(
             actions=["s3:List*", "s3:GetObject*", "sns:Publish"],
             resources=[
@@ -51,7 +52,7 @@ class DevopsAssignmentStack(Stack):
 
 
 
-        #   main lambda - that lists files in the bucket, creation
+        #   main lambda - that lists files and sends SNS
         main_lambda = _lambda.Function(self, "ListS3Lambda",
             runtime=_lambda.Runtime.PYTHON_3_9,
             handler="main_lambda.handler",
@@ -62,10 +63,8 @@ class DevopsAssignmentStack(Stack):
             },
             role = lambda_role
         )
-        # premissions for lambda on s3 bucket
-        bucket.grant_read(main_lambda)
 
-        #helper lambda to help us upload files, creation
+        #helper lambda - uploads local files from "upload_files" to to s3 in deploy
         upload_lambda = _lambda.Function(self, "UploadFilesLambda",
         runtime=_lambda.Runtime.PYTHON_3_9,
         handler="upload_files.handler",
