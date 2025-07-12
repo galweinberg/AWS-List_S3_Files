@@ -8,6 +8,7 @@ from aws_cdk import (
     RemovalPolicy,
     CustomResource,
     Duration,
+    CfnOutput,
 )
 import os
 from constructs import Construct
@@ -64,6 +65,11 @@ class DevopsAssignmentStack(Stack):
             },
             role = lambda_role
         )
+        CfnOutput(self, "ListS3LambdaFunctionName",
+        value=main_lambda.function_name,
+        export_name="ListS3LambdaFunctionName"
+)
+
 
         #helper lambda - uploads local files from "upload_files" to to s3 in deploy
         upload_lambda = _lambda.Function(self, "UploadFilesLambda",
