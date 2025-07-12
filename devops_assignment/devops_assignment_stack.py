@@ -7,12 +7,13 @@ from aws_cdk import (
     aws_sns_subscriptions as subs,
     RemovalPolicy,
     CustomResource,
+    Duration,
 )
 import os
 from constructs import Construct
 from pathlib import Path
 import aws_cdk.custom_resources as cr
-
+from datetime import datetime
 
 class DevopsAssignmentStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs):
@@ -52,8 +53,6 @@ class DevopsAssignmentStack(Stack):
 
 
 
-
-
         #   main lambda - that lists files and sends SNS
         main_lambda = _lambda.Function(self, "ListS3Lambda",
             runtime=_lambda.Runtime.PYTHON_3_9,
@@ -71,6 +70,7 @@ class DevopsAssignmentStack(Stack):
         runtime=_lambda.Runtime.PYTHON_3_9,
         handler="upload_files.handler",
         code=_lambda.Code.from_asset(str(Path(__file__).parent / "lambdas")),
+        timeout=Duration.seconds(10),
         environment={
         "BUCKET_NAME": bucket.bucket_name,
         "LOCAL_FOLDER": "sample_files"
@@ -82,5 +82,8 @@ class DevopsAssignmentStack(Stack):
 
         #makes sure to activate while deplyoing
         provider = cr.Provider(self, "UploadFilesProvider", on_event_handler=upload_lambda)
-        CustomResource(self, "TriggerUpload", service_token=provider.service_token)
+        CustomResource(self, "TriggerUpload", service_token=provider.service_token, 
+                          properties={
+        "Version": str(datetime.now())  
+    })
 
