@@ -145,6 +145,7 @@ This is defined in the CDK.
 ## 🪣 Amazon S3
 The stack creates a new versioned S3 bucket where files from sample_files/ are uploaded during deployment.
 
+
 - Files are uploaded by the helper Lambda function
 
 - Bucket is set to auto-delete on stack destruction (for testing/demo use)
@@ -224,3 +225,4 @@ SNS requires email confirmation after first deploy.
 
 This project is designed to work with the AWS Free Tier.
 
+x
