@@ -38,4 +38,6 @@ jobs:
           AWS_REGION: us-east-1
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
+          AWS_DEFAULT_REGION: us-east-1
+
         run: cdk deploy --require-approval never
