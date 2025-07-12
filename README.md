@@ -2,7 +2,7 @@
 
 This project defines and deploys a simple serverless application using **AWS CDK (Python)**. It uses **Lambda**, **S3**, and **SNS**, with all infrastructure managed as code and deployed through **GitHub Actions**.
 
-***It is important to mention that without inserting AWS secret to GitHub, and changing subs.EmailSubscription("REPLACE_ME@example.com") into your email, it will not work well.***
+***It is important to mention that without inserting AWS secret to GitHub, and also adding your email to secrets as `NOTIFY_EMAIL` , it will not work well.***
 
 ---
 
@@ -80,12 +80,12 @@ In your GitHub repo:
 These are required for the GitHub Actions deployment.
 
 
+
 ### 4. Replace SNS Email
-In your CDK stack file (devops_assignment_stack.py), update the placeholder email:
 
-subs.EmailSubscription("REPLACE_ME@example.com")
+In addition to AWS credentials, add the following GitHub secret:
 
-➡️ Replace it with your own email 
+- `NOTIFY_EMAIL` — The email address to receive SNS notifications. Must be confirmed via email after deployment.
 
 ✅ Important: After deployment, you will receive an email from AWS SNS — click "Confirm subscription" to start receiving notifications.
 
@@ -172,7 +172,7 @@ SNS is used to send an email listing the files in the S3 bucket.
 
 The subscription email is set as a placeholder:
 
-subs.EmailSubscription("REPLACE_ME@example.com")
+Remember to update the email as a secret
 
 
 ### Replace this with your own email and confirm the subscription when prompted by AWS.
@@ -208,7 +208,7 @@ aws lambda invoke \
 - Deliverable	Status
 - GitHub repo with CDK IaC	✅
 - Lambda function to list S3 + send SNS	✅
-- SNS topic with email subscription	✅ (placeholder)
+- SNS topic with email subscription	✅ 
 - Upload files to S3 during deploy	✅
 - GitHub Actions workflow for deployment	✅
 - Manual Lambda trigger method (script)	✅
