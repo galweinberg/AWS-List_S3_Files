@@ -64,6 +64,8 @@ class DevopsAssignmentStack(Stack):
                 "TOPIC_ARN": topic.topic_arn
             },
             role = lambda_role
+            timeout=Duration.seconds(10)  # to make sure it doesnt timeout
+
         )
         CfnOutput(self, "ListS3LambdaFunctionName",
         value=main_lambda.function_name,
