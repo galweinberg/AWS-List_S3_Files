@@ -87,6 +87,9 @@ In addition to AWS credentials, add the following GitHub secret:
 
 - `NOTIFY_EMAIL` — The email address to receive SNS notifications. Must be confirmed via email after deployment.
 
+<img width="1563" height="412" alt="image" src="https://github.com/user-attachments/assets/08c889a9-754b-441c-9f12-8bf845ce70b0" />
+
+
 ✅ Important: After deployment, you will receive an email from AWS SNS — click "Confirm subscription" to start receiving notifications.
 
 ### 5. Bootstrap CDK (first time only)
