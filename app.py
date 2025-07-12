@@ -9,8 +9,8 @@ DevopsAssignmentStack(
     app,
     "DevopsAssignmentStack",
     env=cdk.Environment(
-        account=os.environ["CDK_DEFAULT_ACCOUNT"],
-        region=os.environ["CDK_DEFAULT_REGION"]
+        account=os.environ["AWS_ACCOUNT_ID"],
+        region=os.environ["AWS_REGION"]
     )
 )
 
