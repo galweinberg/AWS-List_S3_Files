@@ -1,6 +1,6 @@
 import boto3
 import os
-
+ # main lambda
 def handler(event, context):
     s3 = boto3.client("s3") # connect to s3
     sns = boto3.client("sns") # connect to sns

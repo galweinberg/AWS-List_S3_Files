@@ -8,6 +8,7 @@ from aws_cdk import (
     RemovalPolicy,
     CustomResource,
 )
+import os
 from constructs import Construct
 from pathlib import Path
 import aws_cdk.custom_resources as cr
@@ -26,7 +27,9 @@ class DevopsAssignmentStack(Stack):
         )
         # SNS part - for email notifications in lambda
         topic = sns.Topic(self, "S3NotificationTopic")
-        topic.add_subscription(subs.EmailSubscription("REPLACE_ME@example.com"))
+        topic.add_subscription(subs.EmailSubscription(os.environ["NOTIFY_EMAIL"])) 
+        # plug in the email as secret
+
 
 
         #IAM part - attached to main lambda
@@ -36,7 +39,6 @@ class DevopsAssignmentStack(Stack):
                 iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole")
         ]
     )
-
         # gives premissions as needed to s3 and SNS
         lambda_role.add_to_policy(iam.PolicyStatement(
             actions=["s3:List*", "s3:GetObject*", "sns:Publish"],
