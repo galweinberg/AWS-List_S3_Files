@@ -63,7 +63,7 @@ class DevopsAssignmentStack(Stack):
                 "BUCKET_NAME": bucket.bucket_name,
                 "TOPIC_ARN": topic.topic_arn
             },
-            role = lambda_role
+            role = lambda_role,
             timeout=Duration.seconds(10)  # to make sure it doesnt timeout
 
         )
