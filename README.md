@@ -174,12 +174,14 @@ There are two Lambda functions in the project:
 ## 📬 SNS Subscription (Email)
 SNS is used to send an email listing the files in the S3 bucket.
 
-The subscription email is set as a placeholder:
+it should look like that:
 
-Remember to update the email as a secret
+<img width="1562" height="233" alt="image" src="https://github.com/user-attachments/assets/d06ab852-2e80-4061-9a2c-54a7e7dfa936" />
 
 
-### Replace this with your own email and confirm the subscription when prompted by AWS.
+### Remember to update the email as a secret and confirm the subscription when prompted by AWS.
+
+
 
 ## 📂 Files Uploaded to S3 on Deploy
 During deployment, a helper Lambda (upload_files.py) uploads everything in the sample_files/ folder to the S3 bucket.
