@@ -37,6 +37,5 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # same
           AWS_REGION: us-east-1
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_REGION: us-east-1
           NOTIFY_EMAIL: ${{ secrets.NOTIFY_EMAIL }}
         run: cdk deploy --require-approval never
