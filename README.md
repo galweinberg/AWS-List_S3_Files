@@ -96,7 +96,7 @@ In addition to AWS credentials, add the following GitHub secret:
 
 ***cdk bootstrap***
 
-### 6. Deploy manually
+### 6. Deploy 
 
 ***cdk deploy***
 
@@ -195,20 +195,39 @@ heyWorld.txt
 This runs automatically during cdk deploy.
 
 ## Manual Lambda Trigger (Test)
-You can test the main Lambda manually using the provided script.
+
+You can manually test the main Lambda function using either Python (via boto3) or the AWS CLI.
+
+🔧 Important: Before testing, make sure your AWS credentials are configured (via aws configure or environment variables), and the stack has been deployed
+
 ***in the project - under tests/test_trigger_lambda***
 
 ### Option 1: Python + Boto3
 
 python tests/test_trigger_lambda.py
-This invokes the Lambda named ListS3Lambda and prints the list of S3 objects.
+
+It looks for the function with a name starting with DevopsAssignmentStack-ListS3Lambda
+Requires boto3 installed (pip install boto3)
 
 ### Option 2: AWS CLI
+If you already know the deployed function name (from AWS Console or CDK output), you can invoke it like this:
 
 aws lambda invoke \
-  --function-name ListS3Lambda \
+  --function-name <your-function-name> \ # change into the deployed func
   --payload '{}' \
   response.json
+  
+Replace <your-function-name> with the actual Lambda name (e.g., DevopsAssignmentStack-ListS3LambdaABC123DEF)
+
+
+📝 Prerequisites
+
+✅ AWS CLI installed and configured (aws configure)
+
+✅ Python 3.x and boto3 if using the Python option
+
+✅ CDK stack deployed successfully
+
 
 ## ✅ Checklist: Assignment Requirements
 - Deliverable	Status
@@ -227,4 +246,4 @@ SNS requires email confirmation after first deploy.
 
 This project is designed to work with the AWS Free Tier.
 
-x
+### Written by Gal Weinberg
