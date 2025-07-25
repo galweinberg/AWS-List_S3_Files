@@ -58,7 +58,7 @@ jobs:
             export AWS_DEFAULT_REGION=us-east-1
 
             LAMBDA_NAME=$(aws cloudformation describe-stacks \
-            --stack-name DevopsAssignmentStack \
+            --stack-name InfraStack\
             --query "Stacks[0].Outputs[?OutputKey=='ListS3LambdaFunctionName'].OutputValue" \
             --output text)
 

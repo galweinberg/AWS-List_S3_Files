@@ -1,4 +1,4 @@
-# DevOps Assignment – AWS  Project
+# AWS  Project
 
 This project defines and deploys a simple serverless application using **AWS CDK (Python)**. It uses **Lambda**, **S3**, and **SNS**, with all infrastructure managed as code and deployed through **GitHub Actions**.
 
@@ -229,15 +229,14 @@ Replace <your-function-name> with the actual Lambda name (e.g., DevopsAssignment
 ✅ CDK stack deployed successfully
 
 
-## ✅ Checklist: Assignment Requirements
-- Deliverable	Status
+## ✅ Checklist of what in the project: 
 - GitHub repo with CDK IaC	✅
 - Lambda function to list S3 + send SNS	✅
 - SNS topic with email subscription	✅ 
 - Upload files to S3 during deploy	✅
 - GitHub Actions workflow for deployment	✅
 - Manual Lambda trigger method (script)	✅
-- README with all required sections	✅
+- README with all sections	✅
 
 ### Notes
 All secrets are handled via GitHub Secrets — none are committed to the repo.

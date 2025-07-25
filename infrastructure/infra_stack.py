@@ -16,12 +16,12 @@ from pathlib import Path
 import aws_cdk.custom_resources as cr
 from datetime import datetime
 
-class DevopsAssignmentStack(Stack):
+class InfraStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
 
         # S3 creation
-        bucket = s3.Bucket(self, "AssignmentBucket",
+        bucket = s3.Bucket(self, "AppBucket",
             versioned=True,
             removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True 

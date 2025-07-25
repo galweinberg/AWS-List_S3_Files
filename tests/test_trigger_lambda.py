@@ -4,7 +4,7 @@ client = boto3.client("lambda")
 
 # Try to find the function that starts with the expected logical name
 functions = client.list_functions()["Functions"]
-target_prefix = "DevopsAssignmentStack-ListS3Lambda"
+target_prefix = "InfraStack-ListS3Lambda"
 
 function_name = None
 for fn in functions:

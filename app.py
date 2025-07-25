@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import aws_cdk as cdk
-from devops_assignment.devops_assignment_stack import DevopsAssignmentStack
+from infrastructure.infra_stack import InfraStack
 import os
 
 app = cdk.App()
 
-DevopsAssignmentStack(
+InfraStack(
     app,
-    "DevopsAssignmentStack",
+    "InfraStack",
     env=cdk.Environment(
         account=os.environ["AWS_ACCOUNT_ID"],
         region=os.environ["AWS_REGION"]
